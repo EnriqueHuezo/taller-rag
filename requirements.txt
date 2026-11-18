@@ -1,0 +1,22 @@
+# FastAPI y Servidor Web
+fastapi>=0.110.0,<1.0.0
+uvicorn[standard]>=0.29.0,<1.0.0
+python-multipart>=0.0.9
+
+# Configuración y Modelado
+pydantic>=2.7.0,<3.0.0
+pydantic-settings>=2.2.0,<3.0.0
+
+# Base de Datos PostgreSQL y pgvector
+psycopg[binary,pool]>=3.1.18,<4.0.0
+pgvector>=0.2.5,<1.0.0
+
+# Procesamiento de Documentos
+pymupdf>=1.24.0,<2.0.0
+
+# Proveedores de LLM y Embeddings
+google-genai>=1.0.0
+openai>=1.20.0
+
+# Re-ranking Neuronal Ligero (CPU ultra-rápido, sin dependencias pesadas de Torch)
+flashrank>=0.2.9

@@ -1,0 +1,57 @@
+# ==============================================================================
+# SEGURIDAD Y SECRETOS (NUNCA SUBIR A GIT)
+# ==============================================================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+secrets/
+
+# ==============================================================================
+# PYTHON Y ENTORNOS VIRTUALES
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# ==============================================================================
+# CACHÉS Y MODELOS DESCARGADOS LOCALMENTE
+# ==============================================================================
+.cache/
+ms-marco-*/
+*.zip
+*.onnx
+*.bin
+
+# ==============================================================================
+# BASES DE DATOS Y ALMACENAMIENTO LOCAL
+# ==============================================================================
+*.db
+*.sqlite
+*.sqlite3
+pgdata/
+data/manuals/
+data/uploads/
+# Conservar sample_docs para que los que clonen el repo puedan probar
+!data/sample_docs/
+
+# ==============================================================================
+# LOGS Y SISTEMA OPERATIVO / IDES
+# ==============================================================================
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
