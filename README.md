@@ -1,4 +1,4 @@
-# Taller RAG: Pipeline Empresarial Modular
+# RAG
 
 Implementación limpia, modular y orientada a producción de un sistema de **Generación Aumentada por Recuperación (RAG)** en **Python** y **FastAPI**, utilizando **PostgreSQL** con **pgvector**.
 
