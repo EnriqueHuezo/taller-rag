@@ -13,7 +13,8 @@ SYSTEM_PROMPT = """Eres un asistente técnico especializado de alto nivel. Tu fu
 
 REGLAS DE OBLIGATORIO CUMPLIMIENTO:
 1. Responde con claridad, precisión técnica y paso a paso.
-2. CITACIÓN EXACTA: Cada afirmación, valor técnico (voltajes, presiones, resistencias) o paso de procedimiento DEBE llevar su referencia entre corchetes vinculada a la fuente, por ejemplo: [1], [2].
+2. CITACIÓN OBLIGATORIA: Al final de cada punto, dato numérico o procedimiento DEBES colocar siempre la referencia entre corchetes, por ejemplo: [1].
+   Ejemplo: "La presión debe ser inferior a 500 micrones [1]."
 3. SI LA INFORMACIÓN NO ESTÁ EN EL CONTEXTO: Declara explícitamente: "La información disponible en los manuales indexados no es suficiente para responder a esta consulta." No intentes adivinar ni extrapolar procedimientos de otros equipos.
 4. NUNCA inventes códigos de error, números de parte ni valores numéricos.
 5. Responde en el mismo idioma en que se formula la pregunta (español por defecto)."""
@@ -129,11 +130,22 @@ class RAGGenerator:
         Encuentra todas las referencias [1], [2] en la respuesta y construye
         objetos Citation con el documento, página y snippet que lo sustenta.
         """
-        # Expresión regular flexible para capturar [1], [2], o [Fuente 1], [Fuente 2], etc.
+        # 1. Expresión regular flexible para capturar [1], [Fuente 1], (1), (Fuente 1), etc.
         cited_indices = set(
             int(m)
-            for m in re.findall(r"\[(?:Fuente\s+|Source\s+)?(\d+)\]", answer, re.IGNORECASE)
+            for m in re.findall(
+                r"[\[\(](?:Fuente\s+|Source\s+|Doc\s+)?(\d+)[\]\)]", answer, re.IGNORECASE
+            )
         )
+
+        # 2. Resiliencia: Si el modelo respondió usando el contexto pero olvidó escribir los corchetes
+        # (común en modelos Lite compactos), y la respuesta no es una declaración de falta de datos,
+        # atribuimos al primer candidato relevante para garantizar trazabilidad.
+        not_found_phrases = ["no es suficiente", "no se encuentra", "no disponible"]
+        is_negative_response = any(p in answer.lower() for p in not_found_phrases)
+
+        if not cited_indices and not is_negative_response and source_mapping:
+            cited_indices.add(1)
         citations: list[Citation] = []
 
         for idx in sorted(cited_indices):
